@@ -2,7 +2,7 @@
 
 import argparse
 
-ALLOWED_METHODS = ["lexical","llm", "rag"]
+ALLOWED_METHODS = ["regex","lexical","llm", "rag"]
 
 def to_jsonable(x):
     if hasattr(x, "model_dump"):

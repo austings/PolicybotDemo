@@ -1,6 +1,6 @@
 # src/models/schemas.py
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from datetime import datetime, timezone
 
 class Justification(BaseModel):
@@ -12,16 +12,16 @@ class Audit(BaseModel):
     method: str
     parameters: Dict[str, Any] = Field(default_factory=dict)
 
-
 class InferredCode(BaseModel):
     code: str
     confidence: float
     justification: Justification
+    code_system: Optional[Literal["HCPCS", "CPT", "ICD10"]] = "HCPCS"
 
 class InferenceResult(BaseModel):
     inferred_codes: List[InferredCode] = Field(default_factory=list)
     audit: Audit
-    
+
 class CachedInferenceEntry(BaseModel):
     key: str
     result: InferenceResult

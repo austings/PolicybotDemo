@@ -4,6 +4,19 @@ from __future__ import annotations
 import hashlib
 import json
 from typing import Any, Dict
+from pathlib import Path
+import hashlib
+
+def sha256_file(path: str | Path) -> str:
+    p = Path(path)
+    h = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+def normalize_text(text: str) -> str:
+    return " ".join(text.lower().split())
 
 def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
