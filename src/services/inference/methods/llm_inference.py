@@ -1,34 +1,46 @@
+from __future__ import annotations
+
+from typing import Any, Dict
 from src.services.inference.methods.base import InferenceMethod
 from src.services.llm.client import LLMClient
+from src.models.schemas import InferenceResult, InferredCode, Justification, Audit, now_iso
 
 class LLMInference(InferenceMethod):
     def __init__(self, endpoint: str | None = None):
         self.endpoint = endpoint or "mock"
         self.llm_client = LLMClient(endpoint=self.endpoint)
 
-
-    def infer(self, policy_text):
+    def infer(self, policy_text: str) -> InferenceResult:
         response = self.llm_client.query(policy_text)
-        inferred_codes = self.process_response(response)
-        return inferred_codes
+        return self._to_result(response)
 
-    def process_response(self, response):
-        inferred_codes = []
-        for code_info in response.get('codes', []):
-            inferred_code = {
-                'code': code_info['code'],
-                'confidence': code_info['confidence'],
-                'justification': code_info['justification']
-            }
-            inferred_codes.append(inferred_code)
-        
-        audit_info = {
-            'method': 'LLM',
-            'input_text': response.get('input_text'),
-            'timestamp': response.get('timestamp')
-        }
-        
-        return {
-            'inferred_codes': inferred_codes,
-            'audit': audit_info
-        }
+    def _to_result(self, response: Dict[str, Any]) -> InferenceResult:
+        codes = []
+        for c in response.get("codes", []):
+            # if justification comes back as a string, normalize it to Justification
+            justification = c.get("justification", "")
+            if isinstance(justification, str):
+                just_obj = Justification(reason=justification)
+            else:
+                # if you later return {reason, details}
+                just_obj = Justification(**justification)
+
+            codes.append(
+                InferredCode(
+                    code=c["code"],
+                    confidence=float(c["confidence"]),
+                    justification=just_obj
+                )
+            )
+
+        audit = Audit(
+            timestamp=response.get("timestamp") or now_iso(),
+            method="llm",
+            parameters={
+                "endpoint": self.endpoint,
+                "model": response.get("model", "unknown"),
+                "mode": "mock" if self.endpoint == "mock" else "remote",
+            },
+        )
+
+        return InferenceResult(inferred_codes=codes, audit=audit)

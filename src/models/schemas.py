@@ -1,5 +1,7 @@
-from pydantic import BaseModel
-from typing import List, Optional
+# src/models/schemas.py
+from pydantic import BaseModel, Field
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timezone
 
 class Justification(BaseModel):
     reason: str
@@ -8,7 +10,8 @@ class Justification(BaseModel):
 class Audit(BaseModel):
     timestamp: str
     method: str
-    parameters: dict
+    parameters: Dict[str, Any] = Field(default_factory=dict)
+
 
 class InferredCode(BaseModel):
     code: str
@@ -16,5 +19,16 @@ class InferredCode(BaseModel):
     justification: Justification
 
 class InferenceResult(BaseModel):
-    inferred_codes: List[InferredCode]
+    inferred_codes: List[InferredCode] = Field(default_factory=list)
     audit: Audit
+    
+class CachedInferenceEntry(BaseModel):
+    key: str
+    result: InferenceResult
+
+class CachedResultStore(BaseModel):
+    version: str = "v1"
+    entries: Dict[str, InferenceResult] = Field(default_factory=dict)
+    
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()

@@ -1,6 +1,7 @@
-class InferenceMethod:
-    def infer(self, policy_text):
-        raise NotImplementedError("Subclasses should implement this method.")
+# src/services/inference/methods/base.py
+from src.models.schemas import InferenceResult
 
-    def get_audit_info(self):
-        raise NotImplementedError("Subclasses should implement this method.")
+class InferenceMethod:
+    def infer(self, policy_text: str) -> InferenceResult:
+        raise NotImplementedError
+
