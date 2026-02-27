@@ -1,0 +1,16 @@
+[
+    {
+        "inferred_codes": [
+            {
+                "code": "A0428",
+                "confidence": 0.7,
+                "justification": "Mock LLM: ambulance transport-related language detected."
+            }
+        ],
+        "audit": {
+            "method": "LLM",
+            "input_text": null,
+            "timestamp": null
+        }
+    }
+]

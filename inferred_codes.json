@@ -1,0 +1,24 @@
+{
+  "inferred_codes": [
+    {
+      "hcpcs_code": "A1234",
+      "confidence": 0.95,
+      "justification": "The policy text mentions specific medical procedures that align with HCPCS code A1234.",
+      "audit": {
+        "method": "LLM",
+        "timestamp": "2023-10-01T12:00:00Z",
+        "input_text": "Sample policy text related to medical procedures."
+      }
+    },
+    {
+      "hcpcs_code": "B5678",
+      "confidence": 0.85,
+      "justification": "The context of the policy suggests the use of equipment covered under HCPCS code B5678.",
+      "audit": {
+        "method": "RAG",
+        "timestamp": "2023-10-01T12:00:00Z",
+        "input_text": "Sample policy text related to medical equipment."
+      }
+    }
+  ]
+}
