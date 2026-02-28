@@ -89,20 +89,90 @@ The pipeline returns structured JSON:
 
 ```json
 [
-  "output": {
-      "inferred_codes": [],
-      "audit": {
-          "timestamp": "2026-02-27T19:47:03.518973+00:00",
-          "method": "orchestrator",
-          "parameters": {
-              "methods": [
-                  "regex",
-                  "lexical"
-              ],
-              "strategy_count": 2
-          }
-      }
-  }
+    {
+        "methods_run": [
+            "lexical"
+        ],
+        "by_method": [
+            {
+                "method": "lexical",
+                "output": {
+                    "inferred_codes": [
+                        {
+                            "code": "R0070",
+                            "confidence": 0.3766209273116631,
+                            "justification": {
+                                "reason": "Lexical similarity between policy text and HCPCS description.",
+                                "details": "score=0.3766; matched_description=Transport portable x-ray"
+                            },
+                            "code_system": "HCPCS"
+                        },
+                        {
+                            "code": "R0075",
+                            "confidence": 0.3148132804018624,
+                            "justification": {
+                                "reason": "Lexical similarity between policy text and HCPCS description.",
+                                "details": "score=0.3148; matched_description=Transport port x-ray multipl"
+                            },
+                            "code_system": "HCPCS"
+                        }
+                    ],
+                    "audit": {
+                        "timestamp": "2026-02-27T20:04:03.508294+00:00",
+                        "method": "lexical",
+                        "parameters": {
+                            "method_version": "v1",
+                            "top_k": 5,
+                            "threshold": 0.25,
+                            "hcpcs_sha": "d752b5543204d6b6a2db8bcec5e67733cb0e855b355bb740897609282589a2bd",
+                            "vectorizer": {
+                                "ngram_range": [
+                                    1,
+                                    2
+                                ],
+                                "stop_words": "english"
+                            },
+                            "cache_hit": false,
+                            "cached_result_key": "b912c28c828f251e1b6af821df853e27652c5e1e6322fb3b9be3b92040907c63",
+                            "cache_path": "src/tests/cache/cached_results.json"
+                        }
+                    }
+                }
+            }
+        ],
+        "output": {
+            "inferred_codes": [
+                {
+                    "code": "R0070",
+                    "confidence": 0.3766209273116631,
+                    "justification": {
+                        "reason": "Lexical similarity between policy text and HCPCS description.",
+                        "details": "score=0.3766; matched_description=Transport portable x-ray"
+                    },
+                    "code_system": "HCPCS"
+                },
+                {
+                    "code": "R0075",
+                    "confidence": 0.3148132804018624,
+                    "justification": {
+                        "reason": "Lexical similarity between policy text and HCPCS description.",
+                        "details": "score=0.3148; matched_description=Transport port x-ray multipl"
+                    },
+                    "code_system": "HCPCS"
+                }
+            ],
+            "audit": {
+                "timestamp": "2026-02-27T20:04:03.508622+00:00",
+                "method": "orchestrator",
+                "parameters": {
+                    "methods": [
+                        "lexical"
+                    ],
+                    "strategy_count": 1
+                }
+            }
+        }
+    }
 ]
 ```
 
